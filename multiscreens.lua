@@ -1,0 +1,1 @@
+/home/gyr/.gyr.d/scripts/gyr-multiscreens.lua
