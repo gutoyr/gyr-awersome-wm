@@ -478,7 +478,7 @@ awful.rules.rules = {
     { rule = { class = "Claws-mail" },
       properties = { tag = tags[1][1],
                      maximized = true } },
-    { rule_any = { class = { "Iceweasel", "Firefox", "Chromium" } },
+    { rule_any = { class = { "Iceweasel", "Firefox", "Chromium", "Google-chrome-stable" } },
       callback = function(c)
         -- All windows should be slaves, except the browser windows.
         if c.role ~= "browser" then awful.client.setslave(c) end
@@ -486,7 +486,7 @@ awful.rules.rules = {
     { rule_any = { class = { "Iceweasel", "Firefox" } },
       properties = { tag = tags[1][3], } },
     --                 maximized = true } },
-    { rule_any = { class = { "Chromium" } },
+    { rule_any = { class = { "Chromium", "Google-chrome-stable" } },
       properties = { tag = tags[1][3], } },
     --                 maximized = true } },
     { rule = { class = "Lotus Notes" , name = "Downloads" },
