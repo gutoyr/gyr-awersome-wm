@@ -510,7 +510,7 @@ tempwidget.width = 35
 ---- cache
 vicious.cache(vicious.widgets.thermal)
 
---vicious.register(tempwidget, vicious.widgets.thermal, " $1°C", 13, { "coretemp.0", "core"} )
+--vicious.register(tempwidget, vicious.widgets.thermal, " $1°C", 13, { "coretemp.0/hwmon/hwmon1", "core"} )
 vicious.register(tempwidget, vicious.widgets.thermal, " $1°C", 13, { "thermal_zone0", "sys" } )
 -- register
 --vicious.register(tempicon, vicious.widgets.thermal,
