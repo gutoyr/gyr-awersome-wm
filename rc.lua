@@ -2,8 +2,8 @@
 -- a la http://www.markurashi.de/dotfiles/awesome/rc.lua
 -- https://github.com/tdy/dotfiles/tree/master/.config/awesome
 
-require("awful")
-require("naughty")
+local awful = require("awful")
+local naughty = require("naughty")
 
 local rc, err = loadfile(awful.util.getdir("config") .. "/awrc.lua")
 if rc then

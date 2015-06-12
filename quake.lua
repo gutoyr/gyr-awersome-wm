@@ -33,7 +33,6 @@ local capi   = { mouse = mouse,
     screen = screen,
     client = client,
     timer = timer }
-local beautiful = require("beautiful")
 
 -- I use a namespace for my modules...
 module("quake")
@@ -45,7 +44,7 @@ function QuakeConsole:display()
    -- First, we locate the terminal
    local client = nil
    local i = 0
-   for c in awful.client.cycle(function (c)
+   for c in awful.client.iterate(function (c)
                 -- c.name may be changed!
                 return c.instance == self.name
             end,
@@ -91,8 +90,7 @@ function QuakeConsole:display()
 
     -- Resize
     awful.client.floating.set(client, true)
-    --client.border_width = 0
-    client.border_width = beautiful.border_width
+    client.border_width = 0
     client.size_hints_honor = false
     client:geometry({ x = x, y = y, width = width, height = height })
 
@@ -122,25 +120,13 @@ function QuakeConsole:new(config)
 
     -- The application to be invoked is:
     --   config.terminal .. " " .. string.format(config.argname, config.name)
-    if config.screen == 1 then
-        config.terminal = config.terminal or "urxvtcd" -- application to spawn
-        config.argname  = config.argname  or "-name %s -e bash -c \"tmux -2 new-session -A -D -s DROPDOWN\""     -- how to specify window name
-        --config.argname  = config.argname  or "-name %s -tn xterm-256color -e screen -a -A -U -D -R DROPDOWN"     -- how to specify window name
-        --config.argname  = config.argname  or "-name %s -e /home/gyr/.config/awesome/tmux-quake"     -- how to specify window name
-        --config.argname  = config.argname  or "-name %s -e bash -c \"tmux has-session -q -t DROPDOWN && exec tmux -2 attach-session -d -t DROPDOWN || exec tmux -2 new-session -s DROPDOWN\""     -- how to specify window name
-        config.terminal = config.terminal or "terminology" -- application to spawn
-        config.argname  = config.argname  or "-n=%s -T=DROPDOWN -e bash -c \"tmux -2 new-session -A -D -s DROPDOWN\""     -- how to specify window name
-    else
-        config.terminal = config.terminal or "urxvtcd -pe tabbed" -- application to spawn
-        config.argname  = config.argname  or "-name %s"     -- how to specify window name
-        --config.terminal = config.terminal or "terminology" -- application to spawn
-        --config.argname  = config.argname  or "-n=%s"     -- how to specify window name
-    end
+    config.terminal = config.terminal or "xterm" -- application to spawn
     config.name     = config.name     or "QuakeConsoleNeedsUniqueName" -- window name
+    config.argname  = config.argname  or "-name %s"     -- how to specify window name
 
     -- If width or height <= 1 this is a proportion of the workspace
-    config.height   = config.height   or 0.6           -- height
-    config.width    = config.width    or 0.99             -- width
+    config.height   = config.height   or 0.25          -- height
+    config.width    = config.width    or 1          -- width
     config.vert     = config.vert     or "top"         -- top, bottom or center
     config.horiz    = config.horiz    or "center"      -- left, right or center
 
@@ -148,13 +134,13 @@ function QuakeConsole:new(config)
     config.visible  = config.visible or false -- Initially, not visible
 
     local console = setmetatable(config, { __index = QuakeConsole })
-    capi.client.add_signal("manage",
+    capi.client.connect_signal("manage",
         function(c)
             if c.instance == console.name and c.screen == console.screen then
                 console:display()
             end
         end)
-    capi.client.add_signal("unmanage",
+    capi.client.connect_signal("unmanage",
         function(c)
             if c.instance == console.name and c.screen == console.screen then
                 console.visible = false
@@ -163,7 +149,7 @@ function QuakeConsole:new(config)
 
     -- "Reattach" currently running QuakeConsole. This is in case awesome is restarted.
     local reattach = capi.timer { timeout = 0 }
-    reattach:add_signal("timeout",
+    reattach:connect_signal("timeout",
         function()
             reattach:stop()
             console:display()

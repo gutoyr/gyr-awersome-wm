@@ -4,9 +4,11 @@
 -- <tdy@gmx.com> --
 -------------------
 
-require("vicious")
-require("awful.tooltip")
-require("naughty")
+local vicious = require("vicious")
+local awful = require("awful")
+local awful_tooltip = require("awful.tooltip")
+local naughty = require("naughty")
+local wibox = require("wibox")
 
 -- {{{ SETTINGS
 graphwidth  = 30
@@ -15,7 +17,7 @@ vgraphwidth  = 6
 vgraphheight = 14
 
 -- Solarized / dark
-require("beautiful")
+local beautiful = require("beautiful")
 --colorblack   = theme.colors.base02
 --colorwhite   = theme.colors.base3
 colorblack   = theme.colors.black
@@ -34,11 +36,6 @@ downcolor    = colorblue
 bordercolor  = colorred
 
 --cpuinterval = 2
---netinterval = 2
---volinterval = 3
---meminterval = 5
---diskinterval = 7
---batinterval = 11
 netinterval  = 2
 volinterval  = 3
 meminterval  = 5
@@ -49,24 +46,17 @@ pkginterval  = 997
 
 -- }}}
 
--- {{{ SPACERS
-spacer = widget({ type = "textbox" })
-spacer.width = 1
-tab = widget({ type = "textbox" })
-tab.text = " | "
-volspacer = widget({ type = "textbox" })
-volspacer.text = " "
-tabiconlf = widget({ type = "textbox" })
-tabiconlf.text = '⮀'
-tabiconl = widget({ type = "textbox" })
-tabiconl.text = '⮁'
-tabiconr = widget({ type = "textbox" })
-tabiconr.text = '⮃'
-tabicon = widget({ type = "imagebox" })
-tabicon.image = image(beautiful.widget_sep)
-debianicon = widget({ type = "imagebox" })
-debianicon.image = image(beautiful.widget_debian)
--- }}}
+-- {{{ FUNCTION
+local string = string
+local function set_text_width(txt, width)
+    local txtlen = string.len(txt)
+    if txtlen < width then
+        for count = 1, width - txtlen, 1 do
+            txt = " " .. txt
+        end
+    end
+    return txt
+end
 
 --local function get_output(cmd)
 --    cmdout = io.popen(cmd)
@@ -76,12 +66,31 @@ debianicon.image = image(beautiful.widget_debian)
 --    return co
 --end
 
+-- }}}
+
+-- {{{ SPACERS
+spacer = wibox.widget.textbox()
+spacer:set_text(" ")
+tab = wibox.widget.textbox()
+tab:set_text(" | ")
+tabiconlf = wibox.widget.textbox()
+tabiconlf:set_text('⮀')
+tabiconl = wibox.widget.textbox()
+tabiconl:set_text('⮁')
+tabiconr = wibox.widget.textbox()
+tabiconr:set_text('⮃')
+tabicon = wibox.widget.imagebox()
+tabicon:set_image(beautiful.widget_sep)
+debianicon = wibox.widget.imagebox()
+debianicon:set_image(beautiful.widget_debian)
+-- }}}
+
 -- {{{ GRAPH WIDGET
 graph = {
-    wired = awful.widget.graph({ layout = awful.widget.layout.horizontal.rightleft }),
-    wifi  = awful.widget.graph({ layout = awful.widget.layout.horizontal.rightleft }),
-    cpu   = awful.widget.graph({ layout = awful.widget.layout.horizontal.rightleft }),
-    tun   = awful.widget.graph({ layout = awful.widget.layout.horizontal.rightleft }),
+    wired = awful.widget.graph(),
+    wifi  = awful.widget.graph(),
+    cpu   = awful.widget.graph(),
+    tun   = awful.widget.graph(),
 }
 
 for _, g in pairs(graph) do
@@ -96,29 +105,29 @@ end
 
 -- {{{ BAR WIDGET
 bar = {
-    mem    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    swap   = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    fsroot = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    fshome = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    vol    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    bat    = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
-    wifi   = awful.widget.progressbar({ layout = awful.widget.layout.horizontal.rightleft }),
+    mem    = awful.widget.progressbar(),
+    swap   = awful.widget.progressbar(),
+    fsroot = awful.widget.progressbar(),
+    fshome = awful.widget.progressbar(),
+    vol    = awful.widget.progressbar(),
+    bat    = awful.widget.progressbar(),
+    wifi   = awful.widget.progressbar(),
 }
 
 for _, b in pairs(bar) do
     b:set_vertical(true):set_width(vgraphwidth):set_height(vgraphheight)
     b:set_ticks(true):set_ticks_size(1)
     b:set_background_color(colorblack):set_border_color(colorblack)
-    b:set_gradient_colors({ colorlight, colordark, colorblue })
+    b:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 20 }, stops = { { 0, colorlight }, { 0.5, colordark }, { 1, colorblue } }})
     b:set_max_value(100)
 end
 
 -- }}}
 
 -- {{{ MEMORY
-memicon = widget({ type = "imagebox" })
-memicon.image = image(beautiful.widget_mem)
-memtooltip = awful.tooltip({})
+memicon = wibox.widget.imagebox()
+memicon:set_image(beautiful.widget_mem)
+memtooltip = awful_tooltip({})
 memtooltip:add_to_object(memicon)
 
 -- cache memory
@@ -135,9 +144,9 @@ vicious.register(memicon, vicious.widgets.mem,
 -- }}}
 
 -- {{{ FILESYSTEM
-fsicon = widget({ type = "imagebox" })
-fsicon.image = image(beautiful.widget_fs)
-fstooltip = awful.tooltip({})
+fsicon = wibox.widget.imagebox()
+fsicon:set_image(beautiful.widget_fs)
+fstooltip = awful_tooltip({})
 fstooltip:add_to_object(fsicon)
 
 -- cache fs
@@ -154,9 +163,9 @@ vicious.register(fsicon, vicious.widgets.fs,
 -- }}}
 
 -- {{{ VOLUME
-volicon = widget({ type = "imagebox" })
-volicon.image = image(beautiful.widget_vol)
-voltooltip = awful.tooltip({})
+volicon = wibox.widget.imagebox()
+volicon:set_image(beautiful.widget_vol)
+voltooltip = awful_tooltip({})
 voltooltip:add_to_object(volicon)
 
 -- cache
@@ -168,10 +177,10 @@ vicious.register(volicon, vicious.widgets.volume,
         voltooltip:set_text(args[2] .. args[1] .. "%")
         if args[2] == "♩" then
             --value = 0
-            volicon.image = image(beautiful.widget_mute)
+            volicon:set_image(beautiful.widget_mute)
         else
             --value = args[1]
-            volicon.image = image(beautiful.widget_vol)
+            volicon:set_image(beautiful.widget_vol)
         end
         bar.vol:set_value(args[1])
     end, volinterval, "-c 0 Master")
@@ -197,9 +206,9 @@ awful.button({ "Control" }, 3, function() awful.util.spawn("amixer -c 0 -q set M
 
 -- {{{ BATTERY
 -- common
-baticon = widget({ type = "imagebox" })
-baticon.image = image(beautiful.widget_bat)
-battooltip = awful.tooltip({})
+baticon = wibox.widget.imagebox()
+baticon:set_image(beautiful.widget_bat)
+battooltip = awful_tooltip({})
 battooltip:add_to_object(baticon)
 
 ---- cache
@@ -213,11 +222,11 @@ vicious.register(baticon, vicious.widgets.bat,
             naughty.notify { text = "Critical batery level!!!\n\n>>>>>" ..  args[2] .. "\n", timeout = 10 }
         end
         if args[1] == "-" then
-            baticon.image = image(beautiful.widget_batd)
+            baticon:set_image(beautiful.widget_batd)
         elseif args[1] == "+" then
-            baticon.image = image(beautiful.widget_batc)
+            baticon:set_image(beautiful.widget_batc)
         else
-            baticon.image = image(beautiful.widget_bat)
+            baticon:set_image(beautiful.widget_bat)
         end
         bar.bat:set_value(args[2])
     end, batinterval, "BAT0")
@@ -225,9 +234,9 @@ vicious.register(baticon, vicious.widgets.bat,
 -- }}}
 
 -- {{{ WIFI
-wifiicon = widget({ type = "imagebox" })
-wifiicon.image = image(beautiful.widget_wifi)
-wifitooltip = awful.tooltip({})
+wifiicon = wibox.widget.imagebox()
+wifiicon:set_image(beautiful.widget_wifi)
+wifitooltip = awful_tooltip({})
 wifitooltip:add_to_object(wifiicon)
 wifitext = "N/A"
 
@@ -261,44 +270,44 @@ awful.button({ }, 1, function() awful.util.spawn("nm-connection-editor", false) 
 --))
 
 -- wired
-wiredicon = widget({ type = "imagebox" })
-wiredicon.image = image(beautiful.widget_wired)
-upicon = widget({ type = "imagebox" })
-upicon.image = image(beautiful.widget_netup)
-downicon = widget({ type = "imagebox" })
-downicon.image = image(beautiful.widget_net)
-wiredtooltip = awful.tooltip({})
+wiredicon = wibox.widget.imagebox()
+wiredicon:set_image(beautiful.widget_wired)
+upicon = wibox.widget.imagebox()
+upicon:set_image(beautiful.widget_netup)
+downicon = wibox.widget.imagebox()
+downicon:set_image(beautiful.widget_net)
+wiredtooltip = awful_tooltip({})
 wiredtooltip:add_to_object(wiredicon)
-upwidget = widget({ type = "textbox" })
-upwidget.width = 50
-downwidget = widget({ type = "textbox" })
-downwidget.width = 50
+upwidget = wibox.widget.textbox()
+--upwidget.width = 50
+downwidget = wibox.widget.textbox()
+--downwidget.width = 50
 
 -- wifi
-wupicon = widget({ type = "imagebox" })
-wupicon.image = image(beautiful.widget_netup)
-wdownicon = widget({ type = "imagebox" })
-wdownicon.image = image(beautiful.widget_net)
-wupwidget = widget({ type = "textbox" })
-wupwidget.width = 50
-wdownwidget = widget({ type = "textbox" })
-wdownwidget.width = 50
+wupicon = wibox.widget.imagebox()
+wupicon:set_image(beautiful.widget_netup)
+wdownicon = wibox.widget.imagebox()
+wdownicon:set_image(beautiful.widget_net)
+wupwidget = wibox.widget.textbox()
+--wupwidget.width = 50
+wdownwidget = wibox.widget.textbox()
+--wdownwidget.width = 50
 
 -- vpn
-tunicon = widget({ type = "imagebox" })
-tunicon.image = image(beautiful.widget_crypto)
-tupicon = widget({ type = "imagebox" })
-tupicon.image = image(beautiful.widget_netup)
-tdownicon = widget({ type = "imagebox" })
-tdownicon.image = image(beautiful.widget_net)
-tuntooltip = awful.tooltip({})
+tunicon = wibox.widget.imagebox()
+tunicon:set_image(beautiful.widget_crypto)
+tupicon = wibox.widget.imagebox()
+tupicon:set_image(beautiful.widget_netup)
+tdownicon = wibox.widget.imagebox()
+tdownicon:set_image(beautiful.widget_net)
+tuntooltip = awful_tooltip({})
 tuntooltip:add_to_object(tunicon)
---tunwidget = widget({ type = "textbox" })
+--tunwidget = wibox.widget.textbox()
 --tunwidget.width = 120
-tupwidget = widget({ type = "textbox" })
-tupwidget.width = 50
-tdownwidget = widget({ type = "textbox" })
-tdownwidget.width = 50
+tupwidget = wibox.widget.textbox()
+--tupwidget.width = 50
+tdownwidget = wibox.widget.textbox()
+--tdownwidget.width = 50
 
 -- cache
 vicious.cache(vicious.widgets.net)
@@ -310,29 +319,29 @@ vicious.register(wiredicon, vicious.widgets.net,
         graph.wired:add_value(args["{eth0 up_kb}"], 1)
         graph.wired:add_value(args["{eth0 down_kb}"], 2)
         wiredtooltip:set_text("Total UP: " .. args["{eth0 tx_mb}"] .. "MB\nTotal DOWN:" .. args["{eth0 rx_mb}"] .. "MB")
-        upwidget.text =  "<span color='" .. upcolor .. "'>" .. args["{eth0 up_kb}"] .. "k/s</span>"
-        downwidget.text = "<span color='" .. downcolor .. "'>" .. args["{eth0 down_kb}"] .. "k/s</span>"
+        upwidget:set_markup("<span color='" .. upcolor .. "'>" .. args["{eth0 up_kb}"] .. "k/s</span>")
+        downwidget:set_markup("<span color='" .. downcolor .. "'>" .. args["{eth0 down_kb}"] .. "k/s</span>")
 
         -- wifi
         if wifitext ~= "N/A" then
             graph.wifi:add_value(args["{wlan0 up_kb}"], 1)
             graph.wifi:add_value(args["{wlan0 down_kb}"], 2)
             graph.wifi:set_width(graphwidth)
-            wupicon.image = image(beautiful.widget_netup)
-            wdownicon.image = image(beautiful.widget_net)
-            wupwidget.text =  "<span color='" .. upcolor .. "'>" .. args["{wlan0 up_kb}"] .. "k/s</span>"
-            wdownwidget.text = "<span color='" .. downcolor .. "'>" .. args["{wlan0 down_kb}"] .. "k/s</span>"
-            wupwidget.width = 50
-            wdownwidget.width = 50
+            wupicon:set_image(beautiful.widget_netup)
+            wdownicon:set_image(beautiful.widget_net)
+            wupwidget:set_markup("<span color='" .. upcolor .. "'>" .. args["{wlan0 up_kb}"] .. "k/s</span>")
+            wdownwidget:set_markup("<span color='" .. downcolor .. "'>" .. args["{wlan0 down_kb}"] .. "k/s</span>")
+            --wupwidget.width = 50
+            --wdownwidget.width = 50
             wifitooltip:set_text("Total UP: " .. args["{wlan0 tx_mb}"] .. "MB\nTotal DOWN: " .. args["{wlan0 rx_mb}"] .. "MB\n" .. wifitext)
         else
             graph.wifi:set_width(5)
-            wupicon.image = image(nil)
-            wdownicon.image = image(nil)
-            wupwidget.text = ""
-            wdownwidget.text = "<span color='" .. downcolor .. "'>✗</span>"
-            wupwidget.width = 1
-            wdownwidget.width = 10
+            wupicon:set_image(nil)
+            wdownicon:set_image(nil)
+            wupwidget:set_text("")
+            wdownwidget:set_markup("<span color='" .. downcolor .. "'>✗</span>")
+            --wupwidget.width = 1
+            --wdownwidget.width = 10
         end
 
         -- vpn
@@ -362,23 +371,23 @@ vicious.register(wiredicon, vicious.widgets.net,
         --tunwidget.width = tunwidth
         if vpn_tp == "" then
             graph.tun:set_width(5)
-            tupicon.image = image(nil)
-            tdownicon.image = image(nil)
-            tupwidget.text = ""
-            tdownwidget.text = "<span color='" .. downcolor .. "'>✗</span>"
-            tupwidget.width = 1
-            tdownwidget.width = 10
+            tupicon:set_image(nil)
+            tdownicon:set_image(nil)
+            tupwidget:set_text("")
+            tdownwidget:set_markup("<span color='" .. downcolor .. "'>✗</span>")
+            --tupwidget.width = 1
+            --tdownwidget.width = 10
             tuntooltip:set_text("VPN DISCONNECTED")
         else
             graph.tun:add_value(args["{" .. vpn_tp .. " up_kb}"], 1)
             graph.tun:add_value(args["{" .. vpn_tp .. " down_kb}"], 2)
             graph.tun:set_width(graphwidth)
-            tupicon.image = image(beautiful.widget_netup)
-            tdownicon.image = image(beautiful.widget_net)
-            tupwidget.text =  "<span color='" .. upcolor .. "'>" .. args["{" .. vpn_tp .. " up_kb}"] .. "k/s</span>"
-            tdownwidget.text = "<span color='" .. downcolor .. "'>" .. args["{" .. vpn_tp .. " down_kb}"] .. "k/s</span>"
-            tupwidget.width = 50
-            tdownwidget.width = 50
+            tupicon:set_image(beautiful.widget_netup)
+            tdownicon:set_image(beautiful.widget_net)
+            tupwidget:set_markup("<span color='" .. upcolor .. "'>" .. args["{" .. vpn_tp .. " up_kb}"] .. "k/s</span>")
+            tdownwidget:set_markup("<span color='" .. downcolor .. "'>" .. args["{" .. vpn_tp .. " down_kb}"] .. "k/s</span>")
+            --tupwidget.width = 50
+            --tdownwidget.width = 50
             tuntooltip:set_text("Interface: " .. vpn_tp .. "\nTotal UP:   " .. args["{" .. vpn_tp .. " tx_mb}"] .. "MB\nTotal DOWN: " .. args["{" .. vpn_tp .. " rx_mb}"] .. "MB")
         end
     end, netinterval)
@@ -386,10 +395,10 @@ vicious.register(wiredicon, vicious.widgets.net,
 -- }}}
 
 -- {{{ CPU
-cpuicon = widget({ type = "imagebox" })
-cpuicon.image = image(beautiful.widget_cpu)
-cpuwidget = widget({ type = "textbox" })
-cpuwidget.width = 20
+cpuicon = wibox.widget.imagebox()
+cpuicon:set_image(beautiful.widget_cpu)
+cpuwidget = wibox.widget.textbox()
+--cpuwidget.width = 20
 graph.cpu:set_stack_colors({ colorlight , colorblue, colorcyan, colorgray })
 
 -- cache
@@ -402,7 +411,8 @@ vicious.register(cpuicon, vicious.widgets.cpu,
         graph.cpu:add_value(args[3], 2)
         graph.cpu:add_value(args[4], 3)
         graph.cpu:add_value(args[5], 4)
-        cpuwidget.text = "<span color='" .. upcolor .. "'>".. args[1] .. "%</span>"
+        local cputxt = set_text_width(args[1], 2)
+        cpuwidget:set_markup("<span color='" .. upcolor .. "'>".. cputxt .. "%</span>")
     end)
 
 -- core %
@@ -415,7 +425,7 @@ vicious.register(cpuicon, vicious.widgets.cpu,
 --vicious.register(cpugraph0, vicious.widgets.cpu, "$2")
 --
 ---- core 0 %
---cpupct0 = widget({ type = "textbox" })
+--cpupct0 = wibox.widget.textbox()
 --vicious.register(cpupct0, vicious.widgets.cpu, "$2%")
 --
 ---- core 1 graph
@@ -425,7 +435,7 @@ vicious.register(cpuicon, vicious.widgets.cpu,
 --vicious.register(cpugraph1, vicious.widgets.cpu, "$3")
 --
 ---- core 1 %
---cpupct1 = widget({ type = "textbox" })
+--cpupct1 = wibox.widget.textbox()
 --vicious.register(cpupct1, vicious.widgets.cpu, "$3%")
 --
 ---- core 2 graph
@@ -434,7 +444,7 @@ vicious.register(cpuicon, vicious.widgets.cpu,
 --vicious.register(cpugraph2, vicious.widgets.cpu, "$4")
 --
 ---- core 2 %
---cpupct2 = widget({ type = "textbox" })
+--cpupct2 = wibox.widget.textbox()
 --vicious.register(cpupct2, vicious.widgets.cpu, "$4%")
 --
 ---- core 3 graph
@@ -443,7 +453,7 @@ vicious.register(cpuicon, vicious.widgets.cpu,
 --vicious.register(cpugraph3, vicious.widgets.cpu, "$5")
 --
 ---- core 3 %
---cpupct3 = widget({ type = "textbox" })
+--cpupct3 = wibox.widget.textbox()
 --vicious.register(cpupct3, vicious.widgets.cpu, "$5%")
 ---- }}}
 
@@ -452,8 +462,8 @@ vicious.register(cpuicon, vicious.widgets.cpu,
 --vicious.cache(vicious.widgets.mpd)
 --
 ---- common
---mpdwidget = widget({ type = "textbox" })
---mpdtooltip = awful.tooltip({})
+--mpdwidget = wibox.widget.textbox()
+--mpdtooltip = awful_tooltip({})
 --mpdtooltip:add_to_object(mpdwidget)
 --
 ---- register
@@ -493,18 +503,18 @@ vicious.register(cpuicon, vicious.widgets.cpu,
 ---- cache
 --vicious.cache(vicious.widgets.pkg)
 --
---pkgwidget = widget({ type = "textbox" } )
+--pkgwidget = wibox.widget.textbox()
 --dist = get_output("lsb_release -si 2> /dev/null || echo 'Arch'")
 --vicious.register(pkgwidget, vicious.widgets.pkg, "$1" , pkginterval, dist)
 -- }}}
 
 -- {{{ THERMAL
 -- common
---tempicon = widget({ type = "imagebox" })
---tempicon.image = image(beautiful.widget_bat)
-tempwidget = widget({ type = "textbox" })
-tempwidget.width = 35 
---temptooltip = awful.tooltip({})
+--tempicon = wibox.widget.imagebox()
+--tempicon:set_image(beautiful.widget_bat))
+tempwidget = wibox.widget.textbox()
+--tempwidget.width = 35 
+--temptooltip = awful_tooltip({})
 --temptooltip:add_to_object(tempicon)
 
 ---- cache
@@ -519,11 +529,11 @@ vicious.register(tempwidget, vicious.widgets.thermal, " $1°C", 13, { "thermal_z
 --        tempwidget.text = "teste"
 --        temptooltip:set_text(args[1] .. args[2] .. "% " .. args [3])
 --        --if args[1] == "-" then
---        --    tempicon.image = image(beautiful.widget_tempd)
+--        --    tempicon:set_image(beautiful.widget_tempd)
 --        --elseif args[1] == "+" then
---        --    tempicon.image = image(beautiful.widget_tempc)
+--        --    tempicon:set_image(beautiful.widget_tempc)
 --        --else
---        --    tempicon.image = image(beautiful.widget_temp)
+--        --    tempicon:set_image(beautiful.widget_temp)
 --        --end
 --        --bar.temp:set_value(args[2])
 --    end, tempinterval)
