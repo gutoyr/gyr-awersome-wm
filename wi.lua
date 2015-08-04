@@ -458,44 +458,40 @@ vicious.register(cpuicon, vicious.widgets.cpu,
 ---- }}}
 
 -- {{{ MPD
----- cache
---vicious.cache(vicious.widgets.mpd)
---
----- common
---mpdwidget = wibox.widget.textbox()
---mpdtooltip = awful_tooltip({})
---mpdtooltip:add_to_object(mpdwidget)
---
----- register
---vicious.register(mpdwidget, vicious.widgets.mpd, function(widget, args)
---    local info = ""
---    local info_text= ""
---    if args["{state}"] == "N/A" or args["{state}"] == "Stop" then
---        info = "□ "
---        info_text = ""
---    else
---        if args["{state}"] == "Play" then
---            info = "➲ "
---        elseif args["{state}"] == "Pause" then
---            info = "▯▯ "
---        end
---        info_text = args["{Artist}"] .. " - " .. args["{Title}"]
---    end
---    mpdtooltip:set_text(info_text)
---
---    return info
---end, volinterval)
---
----- buttons
---mpdwidget:buttons(awful.util.table.join(
---awful.button({ }, 1, function() awful.util.spawn("ncmpcpp toggle", false) end),
---awful.button({ "Shift" }, 1, function() awful.util.spawn("urxvtcd -e gyr-ncmpcpp", false) end),
---awful.button({ }, 3, function() awful.util.spawn("ncmpcpp stop", false) end),
---awful.button({ "Control" }, 1, function() awful.util.spawn("ncmpcpp next", false) end),
---awful.button({ }, 4, function() awful.util.spawn("ncmpcpp next", false) end),
---awful.button({ "Control" }, 3, function() awful.util.spawn("ncmpcpp prev", false) end),
---awful.button({ }, 5, function() awful.util.spawn("ncmpcpp prev", false) end)
---))
+mpdwidget = wibox.widget.textbox()
+mpdtooltip = awful_tooltip({})
+mpdtooltip:add_to_object(mpdwidget)
+
+-- cache
+vicious.cache(vicious.widgets.mpd)
+
+-- register
+vicious.register(mpdwidget, vicious.widgets.mpd, function(widget, args)
+    local info = ""
+    local info_text= ""
+    if args["{state}"] == "N/A" or args["{state}"] == "Stop" then
+        info = "□ "
+        info_text = ""
+    else
+        if args["{state}"] == "Play" then
+            info = "➲ "
+        elseif args["{state}"] == "Pause" then
+            info = "▯▯ "
+        end
+        info_text = args["{Artist}"] .. " - " .. args["{Title}"]
+    end
+    mpdtooltip:set_text(info_text)
+
+    return info
+end, volinterval)
+
+-- buttons
+mpdwidget:buttons(awful.util.table.join(
+awful.button({ }, 1, function() awful.util.spawn("mpc prev", false) end),
+awful.button({ }, 2, function() awful.util.spawn("mpc toggle", false) end),
+awful.button({ "Shift" }, 2, function() awful.util.spawn("mpc stop", false) end),
+awful.button({ }, 3, function() awful.util.spawn("mpc next", false) end)
+))
 
 -- }}}
 

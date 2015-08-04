@@ -200,6 +200,7 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
     left_layout:add(mylauncher)
+    if s == 1 then left_layout:add(mpdwidget) end
     left_layout:add(mytaglist[s])
     left_layout:add(mypromptbox[s])
 
