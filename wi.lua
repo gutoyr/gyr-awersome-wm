@@ -29,11 +29,17 @@ coloryellow  = theme.colors.yellow
 colorcyan    = theme.colors.cyan
 colormagenta = theme.colors.magenta
 colorgray    = theme.colors.gray
+colororange = theme.colors.orange
 colordark    = theme.colors.dark
 colorlight   = theme.colors.light
-upcolor      = colordark
-downcolor    = colorblue
-bordercolor  = colorred
+-- blueish
+--upcolor      = colordark
+--downcolor    = colorblue
+--bordercolor  = colorred
+-- whitred
+upcolor      = colorwhite
+downcolor    = colorred
+bordercolor  = colorwhite
 
 --cpuinterval = 2
 netinterval  = 2
@@ -118,7 +124,10 @@ for _, b in pairs(bar) do
     b:set_vertical(true):set_width(vgraphwidth):set_height(vgraphheight)
     b:set_ticks(true):set_ticks_size(1)
     b:set_background_color(colorblack):set_border_color(colorblack)
-    b:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 20 }, stops = { { 0, colorlight }, { 0.5, colordark }, { 1, colorblue } }})
+    -- blueish
+    --b:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 20 }, stops = { { 0, colorlight }, { 0.5, colordark }, { 1, colorblue } }})
+    -- whitred
+    b:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 20 }, stops = { { 0, colorred }, { 0.5, colorgray }, { 1, colorwhite } }})
     b:set_max_value(100)
 end
 
@@ -399,7 +408,9 @@ cpuicon = wibox.widget.imagebox()
 cpuicon:set_image(beautiful.widget_cpu)
 cpuwidget = wibox.widget.textbox()
 --cpuwidget.width = 20
+-- blueish
 graph.cpu:set_stack_colors({ colorlight , colorblue, colorcyan, colorgray })
+graph.cpu:set_stack_colors({ colorwhite , colorgray, coloryellow, colorred })
 
 -- cache
 vicious.cache(vicious.widgets.cpu)

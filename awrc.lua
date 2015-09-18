@@ -41,7 +41,8 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(awful.util.getdir("config") .. "/blueish/theme.lua")
+--beautiful.init(awful.util.getdir("config") .. "/blueish/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/whitred/theme.lua")
 
 -- Import custom widget
 local wi = require("wi")
