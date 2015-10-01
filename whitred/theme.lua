@@ -23,22 +23,22 @@ theme.colors.orange  = "#ffa500"
 theme.colors.dark    = "#b0e0e6"
 theme.colors.light   = "#e6faff"
 
-theme.bg_normal     = theme.colors.black
+theme.bg_normal     = theme.colors.red
 theme.bg_focus      = theme.colors.white
-theme.bg_urgent     = theme.colors.red
+theme.bg_urgent     = theme.colors.black
 theme.bg_minimize   = theme.colors.gray
 theme.bg_systray    = theme.bg_normal
 
 theme.fg_normal     = theme.colors.white
-theme.fg_focus      = theme.colors.black
-theme.fg_urgent     = theme.colors.black
-theme.fg_minimize   = theme.colors.black
+theme.fg_focus      = theme.colors.red
+theme.fg_urgent     = theme.colors.red
+theme.fg_minimize   = theme.colors.red
 
 theme.border_width  = 1
 theme.border_normal = theme.colors.white
-theme.border_focus  = theme.colors.black
-theme.border_marked = theme.colors.red
-theme.border_urgent  = theme.colors.red
+theme.border_focus  = theme.colors.red
+theme.border_marked = theme.colors.black
+theme.border_urgent  = theme.colors.black
 
 -- There are other variable sets
 -- overriding the default one when

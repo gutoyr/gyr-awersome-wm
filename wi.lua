@@ -35,11 +35,15 @@ colorlight   = theme.colors.light
 -- blueish
 --upcolor      = colordark
 --downcolor    = colorblue
+--downgraphcolor    = colorblue
 --bordercolor  = colorred
+--backgroundcolor = colorblack
 -- whitred
 upcolor      = colorwhite
-downcolor    = colorred
-bordercolor  = colorwhite
+downcolor    = colorblack
+downgraphcolor    = colorred
+bordercolor  = colorblack
+backgroundcolor = colorblack
 
 --cpuinterval = 2
 netinterval  = 2
@@ -101,10 +105,10 @@ graph = {
 
 for _, g in pairs(graph) do
     g:set_width(graphwidth):set_height(graphheight)
-    g:set_background_color(colorblack):set_color(colorcyan)
+    g:set_background_color(backgroundcolor):set_color(colorcyan)
     g:set_stack(true):set_max_value(100)
-    g:set_background_color(colorblack)
-    g:set_stack_colors({ upcolor , downcolor })
+    g:set_background_color(backgroundcolor):set_border_color(bordercolor)
+    g:set_stack_colors({ upcolor , downgraphcolor })
 end
 
 -- }}}
@@ -123,7 +127,7 @@ bar = {
 for _, b in pairs(bar) do
     b:set_vertical(true):set_width(vgraphwidth):set_height(vgraphheight)
     b:set_ticks(true):set_ticks_size(1)
-    b:set_background_color(colorblack):set_border_color(colorblack)
+    b:set_background_color(backgroundcolor):set_border_color(bordercolor)
     -- blueish
     --b:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 20 }, stops = { { 0, colorlight }, { 0.5, colordark }, { 1, colorblue } }})
     -- whitred
@@ -410,6 +414,7 @@ cpuwidget = wibox.widget.textbox()
 --cpuwidget.width = 20
 -- blueish
 graph.cpu:set_stack_colors({ colorlight , colorblue, colorcyan, colorgray })
+-- whitred
 graph.cpu:set_stack_colors({ colorwhite , colorgray, coloryellow, colorred })
 
 -- cache
