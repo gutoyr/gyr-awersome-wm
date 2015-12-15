@@ -126,7 +126,7 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
-cal.register(mytextclock, "<span color='red'>%s</span>")
+cal.register(mytextclock, "<span color='black'>%s</span>")
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -465,34 +465,38 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
-    { rule = { class = "Lotus Notes" },
-      properties = { tag = tags[1][1]} },
                      --minimized = true } },
-    { rule = { class = "Sylpheed" },
-      properties = { tag = tags[1][1],
-                     maximized = true } },
-    { rule = { class = "Claws-mail" },
-      properties = { tag = tags[1][1],
-                     maximized = true } },
-    -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
-    { rule_any = { class = { "Iceweasel", "Firefox", "Chromium" } },
-      callback = function(c)
-        -- All windows should be slaves, except the browser windows.
-        if c.role ~= "browser" then awful.client.setslave(c) end
-      end },
-    { rule_any = { class = { "Iceweasel", "Firefox" } },
-      properties = { tag = tags[1][3], } },
+    { rule_any = { class = 
+                    { "Mail",
+                      "Sylpheed",
+                      "Claws-mail",
+                      "Icedove",
+                      "Lotus Notes",
+                     } },
+      properties = { tag = tags[1][1], } },
+    -- { rule_any = { class =
+    --                 { "Iceweasel",
+    --                   "Firefox",
+    --                   "Chromium",
+    --                   "google-chrome",
+    --                 } },
+    --   callback = function(c)
+    --     -- All windows should be slaves, except the browser windows.
+    --     if c.role ~= "browser" then awful.client.setslave(c) end
+    --   end },
+    -- { rule_any = { class =
+    --                 { "Iceweasel",
+    --                   "Firefox"
+    --                 } },
+    --   properties = { tag = tags[1][1], } },
     --                 maximized = true } },
-    { rule_any = { class = { "Chromium", "Google-chrome-stable" } },
+    { rule_any = { class =
+                    { "Chromium",
+                      "Google-chrome-stable",
+                      "google-chrome",
+                    } },
       properties = { tag = tags[1][3], } },
-    --                 maximized = true } },
     { rule = { class = "Lotus Notes" , name = "Downloads" },
-      properties = { floating = true } },
-    { rule = { class = "Chromium" , name = "Hangouts" },
-      properties = { floating = true } },
-    { rule = { class = "Chromium" , name = "Google+ Hangouts" },
       properties = { floating = true } },
     { rule = { class = "Iceweasel", instance = "Download" },
       properties = { floating = true } },
@@ -502,9 +506,17 @@ awful.rules.rules = {
     -- Flash with Chromium
     { rule = { instance = "exe", class="Exe", instance="exe" },
       properties = { floating = true } },
-    { rule = { class = "Xchat" },
+    { rule_any = { class =
+                    { "Xchat",
+                      "Hexchat",
+                    } },
       properties = { tag = tags[1][2] } },
-    { rule_any = { class = { "Empathy", "Sametime", "Skype", "Pidgin"} },
+    { rule_any = { class =
+                    { "Empathy",
+                      "Sametime",
+                      "Skype",
+                      "Pidgin",
+                    } },
       properties = { tag = tags[1][2],
                      floating = true } },
     { rule = { class = "Pidgin" },
@@ -513,11 +525,11 @@ awful.rules.rules = {
     { rule = { class = "Pidgin" },
       except = { role = "buddy_list" }, -- buddy_list is the master
       properties = { }, callback = awful.client.setslave },
-    { rule = { class = "Vncviewer" },
-      properties = { floating = true } },
-    { rule = { class = "Ssvnc" },
-      properties = { floating = true } },
-    { rule = { class = "ssvncviewer" },
+    { rule_any = { class =
+                    { "Vncviewer",
+                      "Ssvnc",
+                      "ssvncviewer",
+                    } },
       properties = { floating = true } },
     { rule = { class = "VirtualBox" },
       properties = { floating = true } },
