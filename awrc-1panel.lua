@@ -325,10 +325,10 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
     awful.key({ modkey, "Shift"   }, "z", function () awful.util.spawn("xscreensaver-command -lock") end),
-    awful.key({ modkey,           }, "z", function () awful.util.spawn("/home/gyr/.gyr.d/scripts/gyr-shutdown-dialog") end),
-    awful.key({ modkey,           }, "s", function () awful.util.spawn("/home/gyr/.gyr.d/scripts/gyr-switch-window") end),
-    --awful.key({ modkey,           }, "v", function () awful.util.spawn_with_shell("urxvtcd -e /home/gyr/.ibm.d/scripts/ibm-openconnect-vpnc.pl -v") end),
-    awful.key({ modkey,           }, "v", function () awful.util.spawn("nohup /home/gyr/.ibm.d/scripts/ibm-openconnect-vpnc.pl -v") end),
+    awful.key({ modkey,           }, "z", function () awful.util.spawn("/home/gyr/.gyr.d/bin/gyr-shutdown-dialog") end),
+    awful.key({ modkey,           }, "s", function () awful.util.spawn("/home/gyr/.gyr.d/bin/gyr-switch-window") end),
+    --awful.key({ modkey,           }, "v", function () awful.util.spawn_with_shell("urxvtcd -e /home/gyr/.ibm.d/bin/ibm-openconnect-vpnc.pl -v") end),
+    awful.key({ modkey,           }, "v", function () awful.util.spawn("nohup /home/gyr/.ibm.d/bin/ibm-openconnect-vpnc.pl -v") end),
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
@@ -661,7 +661,7 @@ procs =
 --    "devilspie -a",
     "urxvtd -q -f -o",
 --    "tmux -2 new-session -A -D -d -s DROPDOWN",
-    "/home/gyr/.gyr.d/scripts/gyr-redshift",
+    "/home/gyr/.gyr.d/bin/gyr-redshift",
     "syndaemon -i 1 -d",
 --    "conky -d -p 2 -c /home/gyr/.gyr.d/dotfiles/conkyrc-2cpu-awesome",
 --    "/opt/ibm/ibmsam/bin/ibmsaml -q",

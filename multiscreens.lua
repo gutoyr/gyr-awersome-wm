@@ -98,19 +98,19 @@ local function menu()
             output = line:match("LVDS1 connected ")
             if output then
                 menu[#menu + 1] = { 'Only <span weight="bold">laptop (LVDS1 1600x900)</span>',
-                    "/home/gyr/.gyr.d/scripts/gyr-monitor-set-resolution -l",
+                    "/home/gyr/.gyr.d/bin/gyr-monitor-set-resolution -l",
                     "/usr/share/icons/gnome/16x16/devices/display.png"}
             end
             output = line:match("VGA1 connected ")
             if output then
                 menu[#menu + 1] = { 'Only <span weight="bold">monitor (VGA1 1920x1080)</span>',
-                    "/home/gyr/.gyr.d/scripts/gyr-monitor-set-resolution -e",
+                    "/home/gyr/.gyr.d/bin/gyr-monitor-set-resolution -e",
                     "/usr/share/icons/gnome/16x16/devices/display.png"}
                 menu[#menu + 1] = { '<span weight="bold">presentation (LVDS1+VGA1 1024x768)</span>',
-                    "/home/gyr/.gyr.d/scripts/gyr-monitor-set-resolution -p",
+                    "/home/gyr/.gyr.d/bin/gyr-monitor-set-resolution -p",
                     "/usr/share/icons/gnome/16x16/devices/display.png"}
                 menu[#menu + 1] = { '<span weight="bold">dual monitor (LVDS1+VGA1 1920x1080)</span>',
-                    "/home/gyr/.gyr.d/scripts/gyr-monitor-set-resolution -a",
+                    "/home/gyr/.gyr.d/bin/gyr-monitor-set-resolution -a",
                     "/usr/share/icons/gnome/16x16/devices/display.png"}
             end
         end
